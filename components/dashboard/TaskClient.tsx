@@ -181,7 +181,7 @@ export default function TaskClient() {
 
             {/* Table */}
             <Card>
-                <CardContent className="p-0">
+                <CardContent className="!p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="border-b bg-gray-50">
