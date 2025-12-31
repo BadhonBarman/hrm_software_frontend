@@ -6,7 +6,7 @@ import { api, formatApiError } from '@/lib/api-client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon, CalendarIcon, X, Filter } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon, CalendarIcon, X, Filter, ClipboardList, ClipboardCheck } from 'lucide-react'
 import {
     Select,
     SelectContent,
@@ -28,6 +28,9 @@ import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { DateRange } from 'react-day-picker'
+import dynamic from 'next/dynamic'
+
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface AssignedUser {
     user_id: number
@@ -52,6 +55,25 @@ interface Task {
     updated_at: string
 }
 
+interface TaskStats {
+    total_due_tasks: number
+    completed_tasks: number
+    completion_percentage: number
+    status_breakdown: {
+        todo: number
+        in_progress: number
+        review: number
+        completed: number
+        cancelled: number
+    }
+    priority_breakdown: {
+        urgent: number
+        high: number
+        medium: number
+        low: number
+    }
+}
+
 interface ApiResponse {
     total_pages: number
     current_page: number
@@ -60,10 +82,12 @@ interface ApiResponse {
     next: string | null
     previous: string | null
     results: Task[]
+    stats: TaskStats
 }
 
 export default function TaskClient() {
     const [tasks, setTasks] = useState<Task[]>([])
+    const [stats, setStats] = useState<TaskStats | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [loading, setLoading] = useState(false)
@@ -136,6 +160,7 @@ export default function TaskClient() {
 
             const data = await api.get<ApiResponse>(`/employee/tasks/?${params.toString()}`)
             setTasks(data.results)
+            setStats(data.stats)
             setCurrentPage(data.current_page)
             setTotalPages(data.total_pages)
         } catch (err) {
@@ -220,6 +245,115 @@ export default function TaskClient() {
 
     return (
         <div className="space-y-6">
+            {/* Stats Section */}
+            {stats && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Key Metrics */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+                        <Card className="bg-white border-none shadow-sm">
+                            <CardContent className="p-6 flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-500">Total Tasks</p>
+                                    <h3 className="text-2xl font-bold text-gray-900 mt-1">{stats.total_due_tasks}</h3>
+                                </div>
+                                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                    <ClipboardList size={20} />
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-white border-none shadow-sm">
+                            <CardContent className="p-6 flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-500">Completed</p>
+                                    <h3 className="text-2xl font-bold text-gray-900 mt-1">{stats.completed_tasks}</h3>
+                                </div>
+                                <div className="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                                    <ClipboardCheck size={20} />
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-white border-none shadow-sm">
+                            <CardContent className="p-6">
+                                <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-medium text-gray-500">Completion</p>
+                                    <span className="text-sm font-bold text-[#007BF3]">{stats.completion_percentage}%</span>
+                                </div>
+                                <div className="w-full bg-gray-100 rounded-full h-2.5">
+                                    <div
+                                        className="bg-[#007BF3] h-2.5 rounded-full transition-all duration-500"
+                                        style={{ width: `${stats.completion_percentage}%` }}
+                                    ></div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Status Chart */}
+                    <Card className="bg-white border-none shadow-sm">
+                        <CardContent className="p-6">
+                            <h3 className="text-sm font-semibold text-gray-900 mb-4">Task Status</h3>
+                            <div className="h-[200px] flex items-center justify-center">
+                                <Chart
+                                    options={{
+                                        labels: ['To Do', 'In Progress', 'Review', 'Completed', 'Cancelled'],
+                                        colors: ['#3b82f6', '#a855f7', '#f97316', '#22c55e', '#9ca3af'],
+                                        legend: { position: 'bottom', fontSize: '12px' },
+                                        dataLabels: { enabled: false },
+                                        plotOptions: { pie: { donut: { size: '65%' } } },
+                                        stroke: { show: false },
+                                    }}
+                                    series={[
+                                        stats.status_breakdown.todo,
+                                        stats.status_breakdown.in_progress,
+                                        stats.status_breakdown.review,
+                                        stats.status_breakdown.completed,
+                                        stats.status_breakdown.cancelled
+                                    ]}
+                                    type="donut"
+                                    height="100%"
+                                    width="100%"
+                                />
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Priority Chart */}
+                    <Card className="bg-white border-none shadow-sm">
+                        <CardContent className="p-6">
+                            <h3 className="text-sm font-semibold text-gray-900 mb-4">Task Priority</h3>
+                            <div className="h-[200px]">
+                                <Chart
+                                    options={{
+                                        chart: { toolbar: { show: false } },
+                                        xaxis: {
+                                            categories: ['Urgent', 'High', 'Medium', 'Low'],
+                                            labels: { style: { fontSize: '12px' } }
+                                        },
+                                        colors: ['#ef4444', '#f59e0b', '#3b82f6', '#22c55e'],
+                                        plotOptions: { bar: { borderRadius: 4, columnWidth: '50%', distributed: true } },
+                                        legend: { show: false },
+                                        dataLabels: { enabled: false },
+                                        grid: { show: false }
+                                    }}
+                                    series={[{
+                                        name: 'Tasks',
+                                        data: [
+                                            stats.priority_breakdown.urgent,
+                                            stats.priority_breakdown.high,
+                                            stats.priority_breakdown.medium,
+                                            stats.priority_breakdown.low
+                                        ]
+                                    }]}
+                                    type="bar"
+                                    height="100%"
+                                    width="100%"
+                                />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
+
             {/* Filters Section */}
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
