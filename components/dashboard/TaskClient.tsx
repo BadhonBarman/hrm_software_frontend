@@ -6,7 +6,8 @@ import { api, formatApiError } from '@/lib/api-client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon, CalendarIcon, X, Filter, ClipboardList, ClipboardCheck } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
+import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon, CalendarIcon, X, Filter, ClipboardList, ClipboardCheck, MessageSquare, Send } from 'lucide-react'
 import {
     Select,
     SelectContent,
@@ -85,6 +86,26 @@ interface ApiResponse {
     stats: TaskStats
 }
 
+interface Comment {
+    id: number
+    task: number
+    user: number
+    user_email: string
+    user_name: string
+    purpose: string
+    purpose_display: string
+    comment: string
+    created_at: string
+    updated_at: string
+}
+
+interface CommentsResponse {
+    task_id: number
+    task_title: string
+    comments_count: number
+    comments: Comment[]
+}
+
 export default function TaskClient() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [stats, setStats] = useState<TaskStats | null>(null)
@@ -122,7 +143,13 @@ export default function TaskClient() {
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+    const [isCommentsDialogOpen, setIsCommentsDialogOpen] = useState(false)
     const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+    const [comments, setComments] = useState<Comment[]>([])
+    const [commentsLoading, setCommentsLoading] = useState(false)
+    const [newComment, setNewComment] = useState('')
+    const [commentPurpose, setCommentPurpose] = useState('updates')
+
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -207,6 +234,41 @@ export default function TaskClient() {
         } catch (err) {
             toast.error(formatApiError(err))
         }
+    }
+
+    const fetchComments = async (taskId: number) => {
+        setCommentsLoading(true)
+        try {
+            const data = await api.get<CommentsResponse>(`/employee/tasks/${taskId}/comments/`)
+            setComments(data.comments)
+        } catch (err) {
+            toast.error('Failed to load comments')
+        } finally {
+            setCommentsLoading(false)
+        }
+    }
+
+    const handlePostComment = async () => {
+        if (!selectedTask || !newComment.trim()) return
+
+        try {
+            await api.post(`/employee/tasks/${selectedTask.id}/comments/`, {
+                comment: newComment,
+                purpose: commentPurpose
+            })
+            setNewComment('')
+            fetchComments(selectedTask.id)
+            toast.success('Comment posted')
+        } catch (err) {
+            toast.error(formatApiError(err))
+        }
+    }
+
+    const openCommentsDialog = (task: Task) => {
+        setSelectedTask(task)
+        setComments([])
+        setIsCommentsDialogOpen(true)
+        fetchComments(task.id)
     }
 
     // Removed client-side filtering as we now do server-side filtering
@@ -581,6 +643,15 @@ export default function TaskClient() {
                                                     <EyeIcon size={16} />
                                                 </Button>
                                                 <Button
+                                                    onClick={() => openCommentsDialog(task)}
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                                                    title="Comments & Updates"
+                                                >
+                                                    <MessageSquare size={16} />
+                                                </Button>
+                                                <Button
                                                     onClick={() => openEditDialog(task)}
                                                     variant="ghost"
                                                     size="icon"
@@ -737,6 +808,101 @@ export default function TaskClient() {
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>Close</Button>
                     </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Comments Dialog */}
+            <Dialog open={isCommentsDialogOpen} onOpenChange={setIsCommentsDialogOpen}>
+                <DialogContent className="max-w-md h-[600px] flex flex-col p-0 gap-0 overflow-hidden">
+                    <DialogHeader className="p-4 border-b border-gray-100 bg-white">
+                        <DialogTitle className="flex items-center gap-2">
+                            <span>Task Updates</span>
+                            <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-medium border border-blue-100">
+                                {comments.length}
+                            </span>
+                        </DialogTitle>
+                        {selectedTask && (
+                            <p className="text-sm text-gray-500 truncate">{selectedTask.title}</p>
+                        )}
+                    </DialogHeader>
+
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50">
+                        {commentsLoading ? (
+                            <div className="flex justify-center py-8">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                            </div>
+                        ) : comments.length > 0 ? (
+                            comments.map((comment) => (
+                                <div key={comment.id} className="flex gap-3">
+                                    <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold shrink-0">
+                                        {comment.user_name.charAt(0)}
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-semibold text-gray-900">{comment.user_name}</span>
+                                            <span className="text-xs text-gray-400">{format(new Date(comment.created_at), 'MMM d, h:mm a')}</span>
+                                        </div>
+                                        <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-sm text-gray-700 relative group">
+                                            <span className={cn(
+                                                "absolute -top-2.5 right-2 px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide border bg-white",
+                                                comment.purpose === 'updates' ? "text-blue-600 border-blue-100" :
+                                                    comment.purpose === 'question' ? "text-amber-600 border-amber-100" :
+                                                        comment.purpose === 'feedback' ? "text-purple-600 border-purple-100" :
+                                                            "text-gray-500 border-gray-100"
+                                            )}>
+                                                {comment.purpose_display}
+                                            </span>
+                                            <p className="mt-1">{comment.comment}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-12 text-gray-400 text-sm">
+                                <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-20" />
+                                No updates yet
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="p-4 bg-white border-t border-gray-100">
+                        <div className="space-y-3">
+                            <Select value={commentPurpose} onValueChange={setCommentPurpose}>
+                                <SelectTrigger className="h-8 text-xs w-[130px] bg-gray-50 border-gray-200">
+                                    <SelectValue placeholder="Purpose" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="updates">Updates</SelectItem>
+                                    <SelectItem value="question">Question</SelectItem>
+                                    <SelectItem value="clarification">Clarification</SelectItem>
+                                    <SelectItem value="feedback">Feedback</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <div className="flex gap-2">
+                                <Textarea
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    placeholder="Type your update here..."
+                                    className="min-h-[40px] max-h-[120px] resize-none bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault()
+                                            handlePostComment()
+                                        }
+                                    }}
+                                />
+                                <Button
+                                    onClick={handlePostComment}
+                                    disabled={!newComment.trim()}
+                                    size="icon"
+                                    className="h-10 w-10 shrink-0 bg-[#007BF3] hover:bg-[#0068cf]"
+                                >
+                                    <Send size={16} />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>
