@@ -1,0 +1,156 @@
+{
+    "lessonSchedules": [
+        {
+            "id": "1",
+            "day": "Sunday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "2",
+            "day": "Monday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "3",
+            "day": "Tuesday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "4",
+            "day": "Wednesday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "5",
+            "day": "Thursday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "6",
+            "day": "Friday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "7",
+            "day": "Saturday",
+            "subjects": [
+                "Mathematics",
+                "English",
+                "Philosophy"
+            ],
+            "startTime": "10:30 AM",
+            "endTime": "11:30 AM",
+            "date": "12-08-2025"
+        }
+    ],
+    "homeworkSchedules": [
+        {
+            "id": "1",
+            "day": "Sunday",
+            "subjects": [
+                "History",
+                "Economics"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "2",
+            "day": "Monday",
+            "subjects": [
+                "Physics",
+                "Chemistry"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "3",
+            "day": "Tuesday",
+            "subjects": [
+                "Bangla",
+                "History"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "4",
+            "day": "Wednesday",
+            "subjects": [
+                "Mathematics",
+                "Physics"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "5",
+            "day": "Thursday",
+            "subjects": [
+                "English",
+                "Economics"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "6",
+            "day": "Friday",
+            "subjects": [
+                "Chemistry",
+                "Bangla"
+            ],
+            "startTime": "02:00 PM",
+            "endTime": "03:00 PM",
+            "date": "12-08-2025"
+        }
+    ]
+}

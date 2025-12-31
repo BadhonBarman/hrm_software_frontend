@@ -1,0 +1,47 @@
+[
+    {
+        "name": "General Bangla",
+        "code": "125620369",
+        "grade": "9th"
+    },
+    {
+        "name": "General English",
+        "code": "125620370",
+        "grade": "9th"
+    },
+    {
+        "name": "Mathematics",
+        "code": "125620371",
+        "grade": "9th"
+    },
+    {
+        "name": "General Science",
+        "code": "125620372",
+        "grade": "9th"
+    },
+    {
+        "name": "Bangladesh & Global Studies",
+        "code": "125620373",
+        "grade": "9th"
+    },
+    {
+        "name": "Religion Studies",
+        "code": "125620374",
+        "grade": "9th"
+    },
+    {
+        "name": "Information & Communication Technology",
+        "code": "125620375",
+        "grade": "9th"
+    },
+    {
+        "name": "Physical Education & Health",
+        "code": "125620376",
+        "grade": "9th"
+    },
+    {
+        "name": "Career Studies",
+        "code": "125620377",
+        "grade": "9th"
+    }
+]

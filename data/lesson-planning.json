@@ -1,0 +1,102 @@
+{
+    "lessonPlans": [
+        {
+            "id": "1",
+            "title": "Introduce to Algebra",
+            "description": "This lesson introduces...",
+            "subject": "Mathmatics",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "2",
+            "title": "States of matter",
+            "description": "Eita top er overview...",
+            "subject": "General English",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "3",
+            "title": "Introduction to economics",
+            "description": "The most balanced...",
+            "subject": "History",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "4",
+            "title": "History of bangladesh",
+            "description": "Perfect for pre...",
+            "subject": "Economics",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "5",
+            "title": "Descriptive paragraph",
+            "description": "Student Perfor...",
+            "subject": "Bangla",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "6",
+            "title": "About spreadsheets",
+            "description": "Nicher theke best...",
+            "subject": "Philosophy",
+            "class": "9th",
+            "date": "12-08-2025"
+        }
+    ],
+    "homework": [
+        {
+            "id": "1",
+            "title": "Math homework given",
+            "description": "practice set 8, Collect...",
+            "subject": "Mathmatics",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "2",
+            "title": "English essay draft",
+            "description": "Write 10 sentences using...",
+            "subject": "General English",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "3",
+            "title": "Science worksheet",
+            "description": "The most balanced...",
+            "subject": "History",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "4",
+            "title": "History of bangladesh",
+            "description": "Perfect for pre...",
+            "subject": "Economics",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "5",
+            "title": "Descriptive paragraph",
+            "description": "Student Perfor...",
+            "subject": "Bangla",
+            "class": "9th",
+            "date": "12-08-2025"
+        },
+        {
+            "id": "6",
+            "title": "About spreadsheets",
+            "description": "Nicher theke best...",
+            "subject": "Philosophy",
+            "class": "9th",
+            "date": "12-08-2025"
+        }
+    ]
+}

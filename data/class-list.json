@@ -1,0 +1,170 @@
+[
+    {
+        "id": "1",
+        "name": "Class 1",
+        "students": 40,
+        "subject": "Bangla",
+        "schedule": 5
+    },
+    {
+        "id": "2",
+        "name": "Class 2",
+        "students": 50,
+        "subject": "English",
+        "schedule": 4
+    },
+    {
+        "id": "3",
+        "name": "Class 3",
+        "students": 60,
+        "subject": "Mathematics",
+        "schedule": 6
+    },
+    {
+        "id": "4",
+        "name": "Class 4",
+        "students": 24,
+        "subject": "Humanities",
+        "schedule": 5
+    },
+    {
+        "id": "5",
+        "name": "Class 5",
+        "students": 69,
+        "subject": "History",
+        "schedule": 3
+    },
+    {
+        "id": "6",
+        "name": "Class 6",
+        "students": 45,
+        "subject": "English",
+        "schedule": 2
+    },
+    {
+        "id": "7",
+        "name": "Class 7",
+        "students": 55,
+        "subject": "Science",
+        "schedule": 4
+    },
+    {
+        "id": "8",
+        "name": "Class 8",
+        "students": 38,
+        "subject": "Mathematics",
+        "schedule": 5
+    },
+    {
+        "id": "9",
+        "name": "Class 9",
+        "students": 42,
+        "subject": "Physics",
+        "schedule": 3
+    },
+    {
+        "id": "10",
+        "name": "Class 10",
+        "students": 48,
+        "subject": "Chemistry",
+        "schedule": 4
+    },
+    {
+        "id": "11",
+        "name": "Class 11",
+        "students": 35,
+        "subject": "Biology",
+        "schedule": 6
+    },
+    {
+        "id": "12",
+        "name": "Class 12",
+        "students": 52,
+        "subject": "Geography",
+        "schedule": 3
+    },
+    {
+        "id": "13",
+        "name": "Class 13",
+        "students": 44,
+        "subject": "Economics",
+        "schedule": 4
+    },
+    {
+        "id": "14",
+        "name": "Class 14",
+        "students": 58,
+        "subject": "Computer Science",
+        "schedule": 5
+    },
+    {
+        "id": "15",
+        "name": "Class 15",
+        "students": 41,
+        "subject": "Art",
+        "schedule": 2
+    },
+    {
+        "id": "16",
+        "name": "Class 16",
+        "students": 47,
+        "subject": "Music",
+        "schedule": 3
+    },
+    {
+        "id": "17",
+        "name": "Class 17",
+        "students": 53,
+        "subject": "Physical Education",
+        "schedule": 4
+    },
+    {
+        "id": "18",
+        "name": "Class 18",
+        "students": 39,
+        "subject": "Social Studies",
+        "schedule": 5
+    },
+    {
+        "id": "19",
+        "name": "Class 19",
+        "students": 46,
+        "subject": "Literature",
+        "schedule": 4
+    },
+    {
+        "id": "20",
+        "name": "Class 20",
+        "students": 51,
+        "subject": "Philosophy",
+        "schedule": 3
+    },
+    {
+        "id": "21",
+        "name": "Class 21",
+        "students": 43,
+        "subject": "Psychology",
+        "schedule": 4
+    },
+    {
+        "id": "22",
+        "name": "Class 22",
+        "students": 49,
+        "subject": "Sociology",
+        "schedule": 5
+    },
+    {
+        "id": "23",
+        "name": "Class 23",
+        "students": 37,
+        "subject": "Political Science",
+        "schedule": 3
+    },
+    {
+        "id": "24",
+        "name": "Class 24",
+        "students": 54,
+        "subject": "Business Studies",
+        "schedule": 6
+    }
+]

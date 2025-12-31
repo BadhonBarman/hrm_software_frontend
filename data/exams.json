@@ -1,0 +1,282 @@
+{
+    "exams": [
+        {
+            "id": "1",
+            "examName": "Mizanur Rahman",
+            "subject": "English",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        },
+        {
+            "id": "2",
+            "examName": "Sujon miya",
+            "subject": "Bangla",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        },
+        {
+            "id": "3",
+            "examName": "Farhan vai",
+            "subject": "History",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        },
+        {
+            "id": "4",
+            "examName": "Plabon miya",
+            "subject": "Economics",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        },
+        {
+            "id": "5",
+            "examName": "Barhan Khan",
+            "subject": "Philosophy",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        },
+        {
+            "id": "6",
+            "examName": "Ankon vai",
+            "subject": "Mathematics",
+            "examDate": "12-08-2025",
+            "classGrade": "9th",
+            "time": "10:30 AM"
+        }
+    ],
+    "studentsResults": [
+        {
+            "id": "1",
+            "studentName": "Suzon Miya",
+            "idRoll": "125620369",
+            "status": "Pass",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 30
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 40
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 60
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 50
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 50
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "studentName": "Plabon miya",
+            "idRoll": "125620369",
+            "status": "Failed",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 35
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 30
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 45
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 40
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 35
+                }
+            ]
+        },
+        {
+            "id": "3",
+            "studentName": "Saha Plabon",
+            "idRoll": "125620369",
+            "status": "Pass",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 65
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 55
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 70
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 60
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 55
+                }
+            ]
+        },
+        {
+            "id": "4",
+            "studentName": "Ayon Miya",
+            "idRoll": "125620369",
+            "status": "Pass",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 70
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 60
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 75
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 65
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 58
+                }
+            ]
+        },
+        {
+            "id": "5",
+            "studentName": "Challau Marma",
+            "idRoll": "125620369",
+            "status": "Pass",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 80
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 70
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 75
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 68
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 60
+                }
+            ]
+        },
+        {
+            "id": "6",
+            "studentName": "Ankon Miya",
+            "idRoll": "125620369",
+            "status": "Failed",
+            "subjects": [
+                {
+                    "name": "Bangla",
+                    "totalMarks": 100,
+                    "passMarks": 40,
+                    "obtainMarks": 38
+                },
+                {
+                    "name": "English",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 35
+                },
+                {
+                    "name": "History",
+                    "totalMarks": 80,
+                    "passMarks": 40,
+                    "obtainMarks": 42
+                },
+                {
+                    "name": "Econom.",
+                    "totalMarks": 70,
+                    "passMarks": 40,
+                    "obtainMarks": 40
+                },
+                {
+                    "name": "Physics",
+                    "totalMarks": 60,
+                    "passMarks": 40,
+                    "obtainMarks": 38
+                }
+            ]
+        }
+    ]
+}
