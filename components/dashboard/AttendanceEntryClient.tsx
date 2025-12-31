@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CalendarIcon, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
+import { CalendarIcon, ChevronLeft, ChevronRight, MapPin, UserCheck, UserX, Clock, CalendarOff, Palmtree, MoreVertical, UserCheck2Icon } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar as DatePicker } from '@/components/ui/calendar'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, isAfter, isBefore, getDay } from 'date-fns'
@@ -204,31 +204,32 @@ export default function AttendanceEntryClient() {
     return (
         <div className="space-y-6">
             {/* Employee Punch Section */}
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100">
-                <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-blue-100 rounded-full text-blue-600">
-                            <MapPin size={24} />
+            <Card className="bg-white/50 backdrop-blur-md border border-white/20 shadow-sm rounded-2xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 opacity-50"></div>
+                <CardContent className="p-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-6">
+                        <div className="p-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl shadow-lg text-blue-400 ring-4 ring-blue-50">
+                            <UserCheck2Icon size={32} />
                         </div>
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Mark Your Attendance</h2>
-                            <p className="text-sm text-gray-600">Punch in or out with your current location</p>
+                            <h2 className="text-2xl font-bold text-gray-900">Mark Attendance</h2>
+                            <p className="text-gray-500 mt-1">Punch in or out securely with your location</p>
                         </div>
                     </div>
                     <Button
                         onClick={handlePunch}
                         disabled={punchLoading || timeLeft > 0}
                         className={cn(
-                            "min-w-[140px] h-11 font-medium transition-all",
+                            "min-w-[160px] cursor-pointer h-12 text-base font-semibold rounded-full transition-all duration-300 transform hover:scale-105",
                             timeLeft > 0
                                 ? "bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-100"
-                                : "bg-[#00A4EF] hover:bg-[#0090d1] text-white shadow-md hover:shadow-lg"
+                                : "bg-gradient-to-r from-[#007BF3] to-[#00A4EF] hover:shadow-blue-200 hover:shadow-sm text-white border-none"
                         )}
                         variant={timeLeft > 0 ? "outline" : "default"}
                     >
                         {punchLoading ? (
                             <span className="flex items-center gap-2">
-                                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
                                 Processing...
                             </span>
                         ) : timeLeft > 0 ? (
@@ -241,35 +242,75 @@ export default function AttendanceEntryClient() {
             </Card>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <Card className="bg-green-50 border-green-100">
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-700">{stats.present}</div>
-                        <div className="text-xs font-medium text-green-600 uppercase tracking-wider mt-1">Present</div>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-all duration-300 group">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Present</p>
+                                <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.present}</h3>
+                            </div>
+                            <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600 group-hover:bg-emerald-100 transition-colors">
+                                <UserCheck size={20} />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-red-50 border-red-100">
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-red-700">{stats.absent}</div>
-                        <div className="text-xs font-medium text-red-600 uppercase tracking-wider mt-1">Absent</div>
+
+                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-all duration-300 group">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Absent</p>
+                                <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.absent}</h3>
+                            </div>
+                            <div className="p-3 bg-rose-50 rounded-xl text-rose-600 group-hover:bg-rose-100 transition-colors">
+                                <UserX size={20} />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-yellow-50 border-yellow-100">
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-yellow-700">{stats.late}</div>
-                        <div className="text-xs font-medium text-yellow-600 uppercase tracking-wider mt-1">Late</div>
+
+                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-all duration-300 group">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Late</p>
+                                <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.late}</h3>
+                            </div>
+                            <div className="p-3 bg-amber-50 rounded-xl text-amber-600 group-hover:bg-amber-100 transition-colors">
+                                <Clock size={20} />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-gray-50 border-gray-200">
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-gray-700">{stats.offDay}</div>
-                        <div className="text-xs font-medium text-gray-600 uppercase tracking-wider mt-1">Off Day</div>
+
+                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-all duration-300 group">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Off Day</p>
+                                <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.offDay}</h3>
+                            </div>
+                            <div className="p-3 bg-slate-50 rounded-xl text-slate-600 group-hover:bg-slate-100 transition-colors">
+                                <CalendarOff size={20} />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-purple-50 border-purple-100">
-                    <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-purple-700">{stats.holiday}</div>
-                        <div className="text-xs font-medium text-purple-600 uppercase tracking-wider mt-1">Holiday</div>
+
+                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm hover:shadow-md transition-all duration-300 group">
+                    <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Holiday</p>
+                                <h3 className="text-3xl font-bold text-gray-900 mt-2">{stats.holiday}</h3>
+                            </div>
+                            <div className="p-3 bg-violet-50 rounded-xl text-violet-600 group-hover:bg-violet-100 transition-colors">
+                                <Palmtree size={20} />
+                            </div>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
@@ -320,12 +361,12 @@ export default function AttendanceEntryClient() {
             </div>
 
             {/* Calendar Grid */}
-            <Card>
+            <Card className="border-none shadow-xl bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden">
                 <CardContent className="p-0">
                     {/* Days Header */}
-                    <div className="grid grid-cols-7 border-b bg-gray-50">
+                    <div className="grid grid-cols-7 border-b border-gray-100 bg-gray-50/50">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                            <div key={day} className="py-3 text-center text-sm font-medium text-gray-500">
+                            <div key={day} className="py-4 text-center text-sm font-semibold text-gray-500 uppercase tracking-wider">
                                 {day}
                             </div>
                         ))}
@@ -333,12 +374,15 @@ export default function AttendanceEntryClient() {
 
                     {/* Calendar Body */}
                     {loading ? (
-                        <div className="p-12 text-center text-gray-500">Loading calendar...</div>
+                        <div className="p-20 text-center text-gray-500 flex flex-col items-center gap-3">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                            <p>Loading calendar...</p>
+                        </div>
                     ) : (
-                        <div className="grid grid-cols-7 auto-rows-fr bg-gray-200 gap-px border-b border-gray-200">
+                        <div className="grid grid-cols-7 auto-rows-fr bg-gray-50/30 gap-px border-b border-gray-100">
                             {/* Empty cells for start of month */}
                             {emptyDays.map((_, i) => (
-                                <div key={`empty-${i}`} className="bg-white min-h-[120px] p-2" />
+                                <div key={`empty-${i}`} className="bg-white/40 min-h-[140px] p-2" />
                             ))}
 
                             {/* Actual days */}
@@ -364,24 +408,24 @@ export default function AttendanceEntryClient() {
                                     <div
                                         key={day.toString()}
                                         className={cn(
-                                            "bg-white min-h-[120px] p-3 flex flex-col gap-2 transition-colors hover:bg-gray-50",
-                                            isTodayDate && "bg-blue-50/30"
+                                            "bg-white min-h-[140px] p-4 flex flex-col gap-3 transition-all duration-200 hover:bg-blue-50/30 group relative border-b border-r border-gray-50 last:border-r-0",
+                                            isTodayDate && "bg-blue-50/20"
                                         )}
                                     >
                                         <div className="flex justify-between items-start">
                                             <span className={cn(
-                                                "text-sm font-medium h-7 w-7 flex items-center justify-center rounded-full",
-                                                isTodayDate ? "bg-blue-600 text-white" : "text-gray-700"
+                                                "text-sm font-semibold h-8 w-8 flex items-center justify-center rounded-full transition-colors",
+                                                isTodayDate ? "bg-[#007BF3] text-white shadow-md shadow-blue-200" : "text-gray-700 group-hover:bg-gray-100"
                                             )}>
                                                 {format(day, 'd')}
                                             </span>
                                             {displayStatus && (
                                                 <span className={cn(
-                                                    "text-[10px] px-2 py-0.5 rounded-full font-medium border uppercase tracking-wider",
-                                                    displayStatus === 'Late' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
-                                                        displayStatus === 'present' ? 'bg-green-100 text-green-700 border-green-200' :
-                                                            displayStatus === 'absent' ? 'bg-red-100 text-red-700 border-red-200' :
-                                                                'bg-gray-100 text-gray-600 border-gray-200'
+                                                    "text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider shadow-sm",
+                                                    displayStatus === 'Late' ? 'bg-amber-100 text-amber-700' :
+                                                        displayStatus === 'present' ? 'bg-emerald-100 text-emerald-700' :
+                                                            displayStatus === 'absent' ? 'bg-rose-100 text-rose-700' :
+                                                                'bg-slate-100 text-slate-600'
                                                 )}>
                                                     {displayStatus}
                                                 </span>
@@ -389,21 +433,21 @@ export default function AttendanceEntryClient() {
                                         </div>
 
                                         {data && (
-                                            <div className="mt-auto space-y-1">
+                                            <div className="mt-auto space-y-1.5">
                                                 {data.punch_in && (
-                                                    <div className="text-xs text-gray-600 flex justify-between">
-                                                        <span>In:</span>
-                                                        <span className="font-medium">{format(new Date(data.punch_in), 'h:mm a')}</span>
+                                                    <div className="text-xs text-gray-600 flex justify-between items-center bg-gray-50/50 p-1.5 rounded-md">
+                                                        <span className="text-gray-400">In</span>
+                                                        <span className="font-semibold text-gray-700">{format(new Date(data.punch_in), 'h:mm a')}</span>
                                                     </div>
                                                 )}
                                                 {data.punch_out && (
-                                                    <div className="text-xs text-gray-600 flex justify-between">
-                                                        <span>Out:</span>
-                                                        <span className="font-medium">{format(new Date(data.punch_out), 'h:mm a')}</span>
+                                                    <div className="text-xs text-gray-600 flex justify-between items-center bg-gray-50/50 p-1.5 rounded-md">
+                                                        <span className="text-gray-400">Out</span>
+                                                        <span className="font-semibold text-gray-700">{format(new Date(data.punch_out), 'h:mm a')}</span>
                                                     </div>
                                                 )}
                                                 {data.total_hours && parseFloat(data.total_hours) > 0 && (
-                                                    <div className="text-[10px] text-gray-400 text-right pt-1 border-t border-dashed mt-1">
+                                                    <div className="text-[10px] text-gray-400 text-right pt-1.5 px-1">
                                                         {data.total_hours} hrs
                                                     </div>
                                                 )}
@@ -412,11 +456,6 @@ export default function AttendanceEntryClient() {
                                     </div>
                                 )
                             })}
-
-                            {/* Fill remaining cells to complete the grid if needed, 
-                                but standard CSS grid handles this fine by leaving empty space or we can fill.
-                                Let's leave as is for cleaner code.
-                            */}
                         </div>
                     )}
                 </CardContent>

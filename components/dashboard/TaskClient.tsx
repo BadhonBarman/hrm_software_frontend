@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { api, formatApiError } from '@/lib/api-client'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, PencilIcon, EyeIcon, CalendarIcon, X, Filter } from 'lucide-react'
 import {
     Select,
     SelectContent,
@@ -21,7 +22,12 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar'
+import { format } from 'date-fns'
+import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import { DateRange } from 'react-day-picker'
 
 interface AssignedUser {
     user_id: number
@@ -60,9 +66,35 @@ export default function TaskClient() {
     const [tasks, setTasks] = useState<Task[]>([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
-    const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+
+    // Filters
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    // Filters - Initialize from URL params
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+    const [priorityFilter, setPriorityFilter] = useState<string>(searchParams.get('priority') || 'all')
+    const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'all')
+
+    // Determine initial date filter state
+    const initialDate = searchParams.get('date')
+    const initialStartDate = searchParams.get('start_date')
+    const initialEndDate = searchParams.get('end_date')
+
+    const [dateFilterType, setDateFilterType] = useState<'today' | 'specific' | 'range'>(
+        initialDate ? 'specific' : (initialStartDate || initialEndDate ? 'range' : 'today')
+    )
+    const [specificDate, setSpecificDate] = useState<Date | undefined>(
+        initialDate ? new Date(initialDate) : undefined
+    )
+    const [dateRange, setDateRange] = useState<DateRange | undefined>(
+        initialStartDate ? {
+            from: new Date(initialStartDate),
+            to: initialEndDate ? new Date(initialEndDate) : undefined
+        } : undefined
+    )
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
@@ -80,7 +112,29 @@ export default function TaskClient() {
         setLoading(true)
         setError(null)
         try {
-            const data = await api.get<ApiResponse>(`/employee/tasks/?page=${page}`)
+            const params = new URLSearchParams()
+            params.append('page', page.toString())
+
+            if (searchQuery) params.append('search', searchQuery)
+            if (priorityFilter && priorityFilter !== 'all') params.append('priority', priorityFilter)
+            if (statusFilter && statusFilter !== 'all') params.append('status', statusFilter)
+
+            // Date Filtering Logic
+            if (dateFilterType === 'specific' && specificDate) {
+                params.append('date', format(specificDate, 'yyyy-MM-dd'))
+            } else if (dateFilterType === 'range' && dateRange?.from) {
+                params.append('start_date', format(dateRange.from, 'yyyy-MM-dd'))
+                if (dateRange.to) {
+                    params.append('end_date', format(dateRange.to, 'yyyy-MM-dd'))
+                }
+            }
+            // Default 'today' sends no params as per requirement "Default (no params): Shows only TODAY's tasks"
+            // If we explicitly wanted today, we might send date=today, but let's stick to "no params" for default.
+
+            // Update URL
+            router.push(`?${params.toString()}`, { scroll: false })
+
+            const data = await api.get<ApiResponse>(`/employee/tasks/?${params.toString()}`)
             setTasks(data.results)
             setCurrentPage(data.current_page)
             setTotalPages(data.total_pages)
@@ -90,6 +144,10 @@ export default function TaskClient() {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        fetchTasks(1) // Reset to page 1 on filter change
+    }, [searchQuery, priorityFilter, statusFilter, dateFilterType, specificDate, dateRange])
 
     useEffect(() => {
         fetchTasks(currentPage)
@@ -126,11 +184,8 @@ export default function TaskClient() {
         }
     }
 
-    const filteredTasks = tasks.filter(
-        (task) =>
-            task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            task.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    // Removed client-side filtering as we now do server-side filtering
+    const filteredTasks = tasks
 
     const getPriorityColor = (priority: string) => {
         switch (priority?.toLowerCase()) {
@@ -165,81 +220,240 @@ export default function TaskClient() {
 
     return (
         <div className="space-y-6">
-            {/* Search */}
-            <div className='flex flex-row items-center gap-2.5 w-full'>
-                <div className="relative w-full py-3.5">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                        type="text"
-                        placeholder="Search Task..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 h-12"
-                    />
+            {/* Filters Section */}
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                    <div className="relative w-full md:w-96">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Input
+                            type="text"
+                            placeholder="Search tasks..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-9 h-10 bg-white border-gray-200"
+                        />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        {/* Date Filter Type */}
+                        <Select
+                            value={dateFilterType}
+                            onValueChange={(v: any) => {
+                                setDateFilterType(v)
+                                if (v === 'today') {
+                                    setSpecificDate(undefined)
+                                    setDateRange(undefined)
+                                }
+                            }}
+                        >
+                            <SelectTrigger className="w-[140px] h-10 bg-white border-gray-200">
+                                <SelectValue placeholder="Date Filter" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="today">Today</SelectItem>
+                                <SelectItem value="specific">Specific Date</SelectItem>
+                                <SelectItem value="range">Date Range</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Specific Date Picker */}
+                        {dateFilterType === 'specific' && (
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                            "w-[180px] h-10 justify-start text-left font-normal bg-white border-gray-200",
+                                            !specificDate && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {specificDate ? format(specificDate, "PPP") : <span>Pick a date</span>}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={specificDate}
+                                        onSelect={setSpecificDate}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        )}
+
+                        {/* Date Range Picker */}
+                        {dateFilterType === 'range' && (
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        id="date"
+                                        variant={"outline"}
+                                        className={cn(
+                                            "w-[240px] h-10 justify-start text-left font-normal bg-white border-gray-200",
+                                            !dateRange && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {dateRange?.from ? (
+                                            dateRange.to ? (
+                                                <>
+                                                    {format(dateRange.from, "LLL dd, y")} -{" "}
+                                                    {format(dateRange.to, "LLL dd, y")}
+                                                </>
+                                            ) : (
+                                                format(dateRange.from, "LLL dd, y")
+                                            )
+                                        ) : (
+                                            <span>Pick a date range</span>
+                                        )}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        initialFocus
+                                        mode="range"
+                                        defaultMonth={dateRange?.from}
+                                        selected={dateRange}
+                                        onSelect={setDateRange}
+                                        numberOfMonths={2}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        )}
+
+                        {/* Priority Filter */}
+                        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                            <SelectTrigger className="w-[130px] h-10 bg-white border-gray-200">
+                                <SelectValue placeholder="Priority" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Priorities</SelectItem>
+                                <SelectItem value="high">High</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="low">Low</SelectItem>
+                                <SelectItem value="urgent">Urgent</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Status Filter */}
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                            <SelectTrigger className="w-[130px] h-10 bg-white border-gray-200">
+                                <SelectValue placeholder="Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Statuses</SelectItem>
+                                <SelectItem value="todo">To Do</SelectItem>
+                                <SelectItem value="in_progress">In Progress</SelectItem>
+                                <SelectItem value="review">Review</SelectItem>
+                                <SelectItem value="completed">Completed</SelectItem>
+                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        {/* Reset Button */}
+                        {(searchQuery || priorityFilter !== 'all' || statusFilter !== 'all' || dateFilterType !== 'today') && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                    setSearchQuery('')
+                                    setPriorityFilter('all')
+                                    setStatusFilter('all')
+                                    setDateFilterType('today')
+                                    setSpecificDate(undefined)
+                                    setDateRange(undefined)
+                                }}
+                                className="h-10 w-10 text-gray-500 hover:text-gray-700"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
 
             {/* Table */}
-            <Card>
+            <Card className="border-none shadow-sm bg-white rounded-xl overflow-hidden">
                 <CardContent className="!p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="border-b bg-gray-50">
+                            <thead className="bg-gray-50/50 border-b border-gray-100">
                                 <tr>
-                                    <th className="text-left p-4 font-medium text-gray-600">Task Title</th>
-                                    <th className="text-left p-4 font-medium text-gray-600">Assigned To</th>
-                                    <th className="text-left p-4 font-medium text-gray-600">Priority</th>
-                                    <th className="text-left p-4 font-medium text-gray-600">Status</th>
-                                    <th className="text-left p-4 font-medium text-gray-600">Due Date</th>
-                                    <th className="text-left p-4 font-medium text-gray-600">Action</th>
+                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Task Name</th>
+                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
+                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                    <th className="text-right py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="divide-y divide-gray-50">
                                 {filteredTasks.map((task) => (
-                                    <tr key={task.id} className="border-b hover:bg-gray-50">
-                                        <td className="p-4">
-                                            <div className="font-medium text-gray-900">{task.title}</div>
-                                            <div className="text-sm text-gray-500 truncate max-w-xs">{task.description}</div>
+                                    <tr key={task.id} className="group hover:bg-gray-50/50 transition-colors">
+                                        <td className="py-4 px-6">
+                                            <div className="flex flex-col">
+                                                <span className="font-semibold text-gray-900 text-sm">{task.title}</span>
+                                                <span className="text-xs text-gray-500 truncate max-w-[200px] mt-0.5">{task.description}</span>
+                                            </div>
                                         </td>
-                                        <td className="p-4">
-                                            <div className="flex flex-col gap-1">
+                                        <td className="py-4 px-6">
+                                            <div className="flex -space-x-2 overflow-hidden">
                                                 {task.assigned_to && task.assigned_to.length > 0 ? (
-                                                    task.assigned_to.map(user => (
-                                                        <span key={user.user_id} className="text-sm text-gray-700">{user.name}</span>
+                                                    task.assigned_to.map((user, i) => (
+                                                        <div
+                                                            key={user.user_id}
+                                                            className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600"
+                                                            title={user.name}
+                                                        >
+                                                            {user.name.charAt(0)}
+                                                        </div>
                                                     ))
                                                 ) : (
-                                                    <span className="text-sm text-gray-400">Unassigned</span>
+                                                    <span className="text-xs text-gray-400 italic">Unassigned</span>
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="p-4">
-                                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getPriorityColor(task.priority)}`}>
+                                        <td className="py-4 px-6">
+                                            <span className={cn(
+                                                "px-2.5 py-1 rounded-full text-xs font-medium border",
+                                                getPriorityColor(task.priority)
+                                            )}>
                                                 {task.priority}
                                             </span>
                                         </td>
-                                        <td className="p-4">
-                                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(task.status)}`}>
+                                        <td className="py-4 px-6">
+                                            <span className={cn(
+                                                "px-2.5 py-1 rounded-full text-xs font-medium border",
+                                                getStatusColor(task.status)
+                                            )}>
                                                 {getStatusLabel(task.status)}
                                             </span>
                                         </td>
-                                        <td className="p-4 text-gray-600">
-                                            {task.due_date ? new Date(task.due_date).toLocaleDateString() : '-'}
+                                        <td className="py-4 px-6">
+                                            <span className="text-sm text-gray-600">
+                                                {task.due_date ? format(new Date(task.due_date), 'MMM dd, yyyy') : '-'}
+                                            </span>
                                         </td>
-                                        <td className="p-4">
-                                            <div className="flex gap-2">
+                                        <td className="py-4 px-6 text-right">
+                                            <div className="flex items-center justify-end gap-2">
                                                 <Button
                                                     onClick={() => openViewDialog(task)}
-                                                    variant="outline"
-                                                    className='border-gray-800 px-2.5 py-3.5 rounded-lg'
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                                                    title="View Details"
                                                 >
-                                                    <EyeIcon size={16} className="mr-1" /> View
+                                                    <EyeIcon size={16} />
                                                 </Button>
                                                 <Button
                                                     onClick={() => openEditDialog(task)}
-                                                    variant="outline"
-                                                    className='border-gray-800 px-2.5 py-3.5 rounded-lg'
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                                                    title="Update Status"
                                                 >
-                                                    <PencilIcon size={16} className="mr-1" /> Update Status
+                                                    <PencilIcon size={16} />
                                                 </Button>
                                             </div>
                                         </td>
@@ -247,8 +461,11 @@ export default function TaskClient() {
                                 ))}
                                 {filteredTasks.length === 0 && (
                                     <tr>
-                                        <td colSpan={6} className="p-4 text-center text-gray-500">
-                                            {loading ? 'Loading...' : 'No tasks found'}
+                                        <td colSpan={6} className="py-12 text-center text-gray-500">
+                                            <div className="flex flex-col items-center justify-center gap-2">
+                                                <Filter className="h-8 w-8 text-gray-300" />
+                                                <p>No tasks found matching your filters</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 )}

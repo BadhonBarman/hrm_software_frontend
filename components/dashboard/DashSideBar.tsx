@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, ClipboardList, Users, BookOpen, School, Calendar, CalendarCheck, ClipboardCheck, FileText, CreditCard } from 'lucide-react'
+import { Home, ClipboardList, Users, BookOpen, School, Calendar, CalendarCheck, ClipboardCheck, FileText, CreditCard, ListTodo, ListTodoIcon, UserRoundCheckIcon } from 'lucide-react'
 import Cookies from 'js-cookie'
 import Image from 'next/image'
 
@@ -35,8 +35,8 @@ export default function DashSideBar() {
 
   const teacherMenuItems = [
     { title: 'Dashboard', icon: <Home size={20} />, href: '/dashboard' },
-    { title: 'Attendance', icon: <ClipboardList size={20} />, href: '/dashboard/attendance' },
-    { title: 'Task', icon: <Users size={20} />, href: '/dashboard/task' },
+    { title: 'Attendance', icon: <UserRoundCheckIcon size={20} />, href: '/dashboard/attendance' },
+    { title: 'Task', icon: <ListTodoIcon size={20} />, href: '/dashboard/task' },
   ]
 
   const adminMenuItems = [
@@ -52,12 +52,13 @@ export default function DashSideBar() {
       <SidebarHeader>
         <div className='p-2.5 border-b border-dashed border-gray-200'>
           <Link href={`/`} className='flex flex-row items-center justify-center gap-2.5 p-1'>
-            <Image
+            {/* <Image
               src="/images/logo-lg.png"
               alt="Starat Logo"
               width={128}
               height={128}
-            />
+            /> */}
+            <p className='font-bold text-xl text-[#007BF3]'>HRMian</p>
           </Link>
         </div>
       </SidebarHeader>
@@ -72,11 +73,12 @@ export default function DashSideBar() {
                     <SidebarMenuButton asChild>
                       <Link
                         href={item.href}
-                        className={`gap-3.5 h-10 px-3 rounded-lg transition-colors ${isActive
-                          ? 'bg-[#00A4EF] text-white hover:!bg-[#bfe1ff]'
-                          : 'hover:!bg-[#bfe1ff]'
+                        className={`gap-3.5 h-10 px-4 !rounded-full hover:!text-white transition-colors ${isActive
+                          ? 'bg-[#007BF3] text-white hover:!bg-[#007bf3ad]'
+                          : 'hover:!bg-[#007bf3ad] hover:!text-white'
                           }`}
                       >
+                        <span>{item.icon}</span>
                         <span className='text-base'>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
