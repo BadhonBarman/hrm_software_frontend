@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from 'sonner'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Mail, Lock } from 'lucide-react'
 
 export default function SignInPage() {
   const { login } = useAuth()
@@ -16,7 +16,7 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!email || !password) {
       toast.error('Please fill in all fields')
       return
@@ -36,79 +36,114 @@ export default function SignInPage() {
   }
 
   return (
-    <>
-    <div className='bg-gray-100 grid grid-cols-1 md:grid-cols-2 h-screen pt-12 md:pt-0 overflow-hidden'>
-        <div className='overflow-hidden'>
-            <Image  src={"/images/auth_art.png"} height={412} width={1076} alt="login-illustration" className="w-[912px] hidden sm:block h-full object-center"/>
-        </div>
+    <div className='bg-gradient-to-br from-blue-50 via-gray-50 to-blue-100 min-h-screen flex items-center justify-center p-4'>
+      <div className='w-full max-w-md'>
+        {/* Card Container */}
+        <div className='bg-white rounded-2xl shadow-xl p-8 md:p-10'>
 
-        <div className='container flex flex-col items-start px-8 lg:pt-28 pt-4 md:px-42 2xl:px-64 lg:py-20 2xl:py-30'>
+          {/* Header */}
+          <div className='text-center mb-8'>
+            <h1 className='text-3xl font-bold text-gray-900 mb-2'>Welcome Back</h1>
+            <p className='text-gray-500'>Sign in to continue to your account</p>
+          </div>
 
-            <div className='text-center w-full font-bold text-2xl'>
-                <h2>Sign in</h2>
-            </div>
-
-            <form onSubmit={handleSubmit} className='w-full mt-10 space-y-4'>
-                <div>
-                    <label htmlFor="email" className='block text-sm font-medium mb-2'>Email Address</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder='example@gmail.com' 
-                      className='w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500'
-                      disabled={isLoading}
-                      required
-                    />
+          {/* Form */}
+          <div onSubmit={handleSubmit} className='space-y-5'>
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className='block text-sm font-semibold text-gray-700 mb-2'>
+                Email Address
+              </label>
+              <div className='relative'>
+                <div className='absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none'>
+                  <Mail className='h-5 w-5 text-gray-400' />
                 </div>
-                <div>
-                    <label htmlFor="password" className='block text-sm font-medium mb-2'>Password</label>
-                    <input 
-                      type="password" 
-                      id="password" 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder='at least 8 characters' 
-                      className='w-full px-4 py-3 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500'
-                      disabled={isLoading}
-                      required
-                    />
-                </div>
-                <div className='flex flex-row justify-end'>
-                    <Link href={"/reset-password/"} className='text-sm text-blue-600 hover:underline'>Forgot Password?</Link>
-                </div>
-
-                <button 
-                  type="submit"
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder='example@gmail.com'
+                  className='w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
                   disabled={isLoading}
-                  className='w-full px-4 py-3 mt-0 text-white primary_blue_bg rounded-lg hover:bg-[#102633] focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
-                >
-                    {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                    {isLoading ? 'Signing in...' : 'Sign in'}
-                </button>
-            </form>
-
-            <div className='w-full flex flex-row items-center justify-center gap-4 mt-6 text-gray-500'>
-                <Separator className='flex-1 bg-white' />
-                <p>or</p>
-                <Separator className='flex-1 bg-white' />
+                  required
+                />
+              </div>
             </div>
 
-            <div className='w-full mt-6 space-y-2.5'>
-                <Link href={"/api/auth/google"} className='flex flex-row gap-4 items-center justify-center w-full px-4 py-3 text-gray-700 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500'>
-                    <Image src={"/icons/Google.png"} alt="google-icon" width={20} height={20} />
-                    <p>Sign in with Google</p>
-                </Link>
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className='block text-sm font-semibold text-gray-700 mb-2'>
+                Password
+              </label>
+              <div className='relative'>
+                <div className='absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none'>
+                  <Lock className='h-5 w-5 text-gray-400' />
+                </div>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder='type your password carefully'
+                  className='w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200'
+                  disabled={isLoading}
+                  required
+                />
+              </div>
             </div>
 
-            {/* <div className='flex flex-row gap-2.5 items-center mt-6 justify-center w-full text-sm'>
-                <p>Don't you have an account?</p>
-                <Link href={"/auth/signup"} className='text-blue-600 hover:underline'>Sign up</Link>
-            </div> */}
+            {/* Forgot Password Link */}
+            <div className='flex justify-end'>
+              <Link
+                href={"/reset-password/"}
+                className='text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors'
+              >
+                Forgot Password?
+              </Link>
+            </div>
 
+            {/* Submit Button */}
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className='w-full px-4 py-3.5 mt-2 text-white font-semibold bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]'
+            >
+              {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
+              {isLoading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className='flex items-center justify-center gap-4 my-6'>
+            <Separator className='flex-1 bg-gray-200' />
+            <span className='text-sm text-gray-500 font-medium'>OR</span>
+            <Separator className='flex-1 bg-gray-200' />
+          </div>
+
+          {/* Google Sign In */}
+          <Link
+            href={"/api/auth/google"}
+            className='flex items-center justify-center gap-3 w-full px-4 py-3.5 text-gray-700 font-semibold bg-white rounded-xl border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]'
+          >
+            <Image src={"/icons/Google.png"} alt="google-icon" width={22} height={22} />
+            <span>Sign in with Google</span>
+          </Link>
+
+          {/* Sign Up Link - Uncomment if needed */}
+          {/* <div className='flex items-center justify-center gap-2 mt-6 text-sm'>
+            <p className='text-gray-600'>Don't have an account?</p>
+            <Link href={"/auth/signup"} className='font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors'>
+              Sign up
+            </Link>
+          </div> */}
         </div>
+
+        {/* Footer Text */}
+        <p className='text-center text-sm text-gray-500 mt-6'>
+          By signing in, you agree to our Terms & Privacy Policy
+        </p>
+      </div>
     </div>
-    </>
   )
 }

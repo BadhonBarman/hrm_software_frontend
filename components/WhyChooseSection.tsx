@@ -42,7 +42,7 @@ const WhyChooseSection = () => {
                         "Why choose us"
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Join thousands of teachers who trust Starat to streamline their teaching workflow.
+                        Join thousands of teachers who trust hrmian to streamline their teaching workflow.
                     </p>
                 </motion.div>
 

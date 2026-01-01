@@ -41,7 +41,7 @@ const Footer = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-2xl font-bold mb-4">Starat</h3>
+                        <h3 className="text-2xl font-bold mb-4">hrmian</h3>
                         <p className="text-gray-400 mb-4">
                             Empowering teachers to work smarter, not harder.
                             Join thousands of educators transforming their classrooms.
@@ -92,7 +92,7 @@ const Footer = () => {
                         <ul className="space-y-3">
                             <li className="flex items-start gap-3">
                                 <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
-                                <span className="text-gray-400">support@starat.com</span>
+                                <span className="text-gray-400">support@hrmian.com</span>
                             </li>
                             <li className="flex items-start gap-3">
                                 <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
@@ -144,7 +144,7 @@ const Footer = () => {
                 <div className="border-t border-gray-800 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-gray-400 text-sm">
-                            Copyright © {currentYear} Starat. All rights reserved.
+                            Copyright © {currentYear} hrmian. All rights reserved.
                         </p>
                         <div className="flex gap-6">
                             {supportLinks.map((link) => (

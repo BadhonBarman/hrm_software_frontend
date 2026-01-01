@@ -55,7 +55,7 @@ export default function DashSideBar() {
           <Link href={`/`} className='flex flex-row items-center justify-center gap-2.5 p-1'>
             {/* <Image
               src="/images/logo-lg.png"
-              alt="Starat Logo"
+              alt="hrmian Logo"
               width={128}
               height={128}
             /> */}

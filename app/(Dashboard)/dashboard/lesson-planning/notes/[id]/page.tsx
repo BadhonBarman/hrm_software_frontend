@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import LessonNotesClient from '@/components/dashboard/LessonNotesClient'
 
 export const metadata: Metadata = {
-    title: 'Lesson Notes | Starat Dashboard',
+    title: 'Lesson Notes | hrmian Dashboard',
     description: 'Manage lesson notes and homework',
 }
 

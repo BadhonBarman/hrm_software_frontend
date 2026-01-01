@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import SchedulingClient from '@/components/dashboard/SchedulingClient'
 
 export const metadata: Metadata = {
-    title: 'Class Scheduling | Starat Dashboard',
+    title: 'Class Scheduling | hrmian Dashboard',
     description: 'Manage class schedules',
 }
 

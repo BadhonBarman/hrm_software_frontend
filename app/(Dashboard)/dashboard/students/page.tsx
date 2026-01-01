@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import StudentListClient from '@/components/dashboard/StudentListClient'
 
 export const metadata: Metadata = {
-    title: 'Student | Starat Dashboard',
+    title: 'Student | hrmian Dashboard',
     description: 'Manage student information',
 }
 

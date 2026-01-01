@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Starat",
-  description: "Starat - A Teacher Assistant tool to make easy teachers student class, exam, attendance, and more.",
+  title: "hrmian",
+  description: "hrmian - A Teacher Assistant tool to make easy teachers student class, exam, attendance, and more.",
 };
 
 export default function RootLayout({

@@ -26,11 +26,11 @@ const NavBar = () => {
                     >
                         <Image
                             src="/images/logo-lg.png"
-                            alt="Starat Logo"
+                            alt="hrmian Logo"
                             width={128}
                             height={128}
                         />
-                        {/* <span className="text-2xl font-bold text-gray-900">Starat</span> */}
+                        {/* <span className="text-2xl font-bold text-gray-900">hrmian</span> */}
                     </Link>
 
                     {/* Desktop Menu */}

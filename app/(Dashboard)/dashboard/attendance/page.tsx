@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import AttendanceEntryClient from '@/components/dashboard/AttendanceEntryClient'
 
 export const metadata: Metadata = {
-  title: 'Attendance Entry | Starat Dashboard',
+  title: 'Attendance Entry | hrmian Dashboard',
   description: 'Mark student attendance for classes',
 }
 

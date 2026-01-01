@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
 
 
   const response = NextResponse.next()
-  
+
 
   if (accessToken) {
     response.cookies.set('access_token', accessToken, {
