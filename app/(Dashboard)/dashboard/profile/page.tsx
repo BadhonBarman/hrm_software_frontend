@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Label } from '@/components/ui/label'
-import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 import { api, formatApiError } from '@/lib/api-client'
 
 interface Profile {
@@ -25,19 +25,9 @@ interface Profile {
   updated: string
 }
 
-interface SubscriptionPackage {
-  id: number
-  name: string
-  price: string
-  offer_price: string | null
-  duration_days: number
-  created: string
-}
-
 export default function ProfileSettings() {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [packages, setPackages] = useState<SubscriptionPackage[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -81,18 +71,8 @@ export default function ProfileSettings() {
     }
   }
 
-  const fetchPackages = async () => {
-    try {
-      const data = await api.get<SubscriptionPackage[]>('/subscription-packages/')
-      setPackages(data)
-    } catch (err) {
-      console.error('Failed to fetch packages', err)
-    }
-  }
-
   useEffect(() => {
     fetchProfile()
-    fetchPackages()
   }, [])
 
   const handleProfileUpdate = async () => {
@@ -178,10 +158,9 @@ export default function ProfileSettings() {
       )}
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="subscription">Subscription</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
@@ -342,58 +321,6 @@ export default function ProfileSettings() {
               </Button>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        <TabsContent value="subscription">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {packages.map((pkg) => (
-              <Card key={pkg.id} className="flex flex-col hover:shadow-lg transition-shadow border-2 hover:border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-xl">{pkg.name}</CardTitle>
-                  <CardDescription>{pkg.duration_days} Days Access</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="mb-4">
-                    {pkg.offer_price ? (
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-bold">${pkg.offer_price}</span>
-                        <span className="text-sm text-gray-500 line-through">${pkg.price}</span>
-                      </div>
-                    ) : (
-                      <span className="text-3xl font-bold">${pkg.price}</span>
-                    )}
-                  </div>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Full Access to all features</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Priority Support</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Unlimited Updates</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    className="w-full" 
-                    onClick={() => router.push(`/dashboard/pay?packageId=${pkg.id}&teacherId=${profile?.user}`)}
-                  >
-                    Subscribe Now
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-            {packages.length === 0 && (
-              <div className="col-span-full text-center py-10 text-gray-500">
-                No subscription packages available at the moment.
-              </div>
-            )}
-          </div>
         </TabsContent>
       </Tabs>
     </div>
