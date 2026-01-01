@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, ClipboardList, Users, BookOpen, School, Calendar, CalendarCheck, ClipboardCheck, FileText, CreditCard, ListTodo, ListTodoIcon, UserRoundCheckIcon } from 'lucide-react'
+import { Home, ClipboardList, Users, BookOpen, School, Calendar, CalendarCheck, ClipboardCheck, FileText, CreditCard, ListTodo, ListTodoIcon, UserRoundCheckIcon, RadioIcon } from 'lucide-react'
 import Cookies from 'js-cookie'
 import Image from 'next/image'
 
@@ -37,6 +37,7 @@ export default function DashSideBar() {
     { title: 'Dashboard', icon: <Home size={20} />, href: '/dashboard' },
     { title: 'Attendance', icon: <UserRoundCheckIcon size={20} />, href: '/dashboard/attendance' },
     { title: 'Task', icon: <ListTodoIcon size={20} />, href: '/dashboard/task' },
+    { title: 'Keep Connect', icon: <RadioIcon size={20} />, href: '/dashboard/keep-connect' },
   ]
 
   const adminMenuItems = [
