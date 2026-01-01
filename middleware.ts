@@ -7,9 +7,13 @@ export function middleware(request: NextRequest) {
 
   console.log('Middleware - Path:', pathname, 'Token exists:', !!accessToken)
 
+  // Redirect root path to dashboard
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
+  // Protected routes - require authentication
   if (pathname.startsWith('/dashboard')) {
-
     if (!accessToken) {
       const signInUrl = new URL('/sign-in', request.url)
       signInUrl.searchParams.set('redirect', pathname)
@@ -17,14 +21,14 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // Redirect authenticated users away from sign-in
   if (pathname.startsWith('/sign-in') && accessToken) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-
   const response = NextResponse.next()
 
-
+  // Maintain access token in cookies
   if (accessToken) {
     response.cookies.set('access_token', accessToken, {
       path: '/',
@@ -38,6 +42,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
     '/dashboard/:path*',
     '/sign-in',
   ],
