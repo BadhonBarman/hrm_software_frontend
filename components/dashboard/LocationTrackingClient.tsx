@@ -250,10 +250,10 @@ export default function SimpleLocationTracker() {
     const config = statusConfig[status]
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-6">
+        <div className="min-h-screen flex items-center justify-center p-6">
             <div className="w-full max-w-2xl space-y-6">
                 {/* Config Info */}
-                <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm">
+                {/* <Card className="bg-white/80 backdrop-blur-sm border-none shadow-sm">
                     <CardContent className="p-4">
                         <div className="flex items-center justify-between text-sm">
                             <span className="text-gray-600">Polling Rate</span>
@@ -262,10 +262,10 @@ export default function SimpleLocationTracker() {
                             </span>
                         </div>
                     </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Main Status Card */}
-                <Card className={`${config.bgColor} border-2 ${config.borderColor} shadow-2xl overflow-hidden`}>
+                <Card className={`${config.bgColor} border-2 ${config.borderColor} shadow-sm overflow-hidden`}>
                     <CardContent className="p-12">
                         <div className="flex flex-col items-center text-center space-y-8">
                             {/* Icon with pulse rings */}
@@ -411,7 +411,8 @@ export default function SimpleLocationTracker() {
                                 <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span className="text-blue-600 font-bold text-xs">3</span>
                                 </div>
-                                <p>Your location will be sent automatically every {POLLING_CONFIG.SEND_INTERVAL_MS / 1000} seconds</p>
+                                <p>Your location will be sent automatically </p>
+                                {/* every {POLLING_CONFIG.SEND_INTERVAL_MS / 1000} seconds */}
                             </div>
                         </div>
                     </CardContent>
