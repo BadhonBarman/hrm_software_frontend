@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "hrmian",
-  description: "hrmian - A Teacher Assistant tool to make easy teachers student class, exam, attendance, and more.",
+  description: "hrmian - Human Resource Management System",
 };
 
 export default function RootLayout({
