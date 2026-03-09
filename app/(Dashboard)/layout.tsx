@@ -41,12 +41,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
             <div className="flex items-center gap-2">
               {/* Notification */}
-              <button
+              {/* <button
                 className="rounded-full border bg-gray-100 p-2.5 hover:bg-gray-200 transition-colors"
                 aria-label="Notifications"
               >
                 <BellIcon size={18} />
-              </button>
+              </button> */}
 
               {/* Profile */}
               <Tooltip>

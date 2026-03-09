@@ -577,7 +577,7 @@ export default function TaskClient() {
                             <thead className="bg-gray-50/50 border-b border-gray-100">
                                 <tr>
                                     <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Task Name</th>
-                                    <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
+                                    {/* <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th> */}
                                     <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
                                     <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th className="text-left py-4 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
@@ -593,7 +593,7 @@ export default function TaskClient() {
                                                 <span className="text-xs text-gray-500 truncate max-w-[200px] mt-0.5">{task.description}</span>
                                             </div>
                                         </td>
-                                        <td className="py-4 px-6">
+                                        {/* <td className="py-4 px-6">
                                             <div className="flex -space-x-2 overflow-hidden">
                                                 {task.assigned_to && task.assigned_to.length > 0 ? (
                                                     task.assigned_to.map((user, i) => (
@@ -609,7 +609,7 @@ export default function TaskClient() {
                                                     <span className="text-xs text-gray-400 italic">Unassigned</span>
                                                 )}
                                             </div>
-                                        </td>
+                                        </td> */}
                                         <td className="py-4 px-6">
                                             <span className={cn(
                                                 "px-2.5 py-1 rounded-full text-xs font-medium border",
